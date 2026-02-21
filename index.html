@@ -19,35 +19,44 @@
 
 <!-- 頂部導航 -->
 <header class="bg-red-600 text-white shadow-md sticky top-0 z-40">
-  <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-    <h1 class="text-xl font-bold flex items-center gap-2"><i class="fas fa-utensils"></i> 阿胖團購</h1>
+  <div class="container mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-4">
     
-    <div class="flex items-center gap-3">
-        <div class="bg-red-800 p-1 rounded-lg flex text-xs font-bold mr-2">
-            <button onclick="switchView('client')" id="btn-view-client" class="px-3 py-1 rounded bg-white text-red-800 shadow transition">訂購</button>
-            <button onclick="switchView('admin')" id="btn-view-admin" class="px-3 py-1 rounded text-red-200 hover:text-white transition">管理</button>
+    <!-- 左側 Logo -->
+    <h1 class="text-2xl font-bold flex items-center gap-2 shrink-0">
+        <i class="fas fa-utensils"></i> 阿胖團購
+    </h1>
+    
+    <!-- 中間按鈕區 (置中顯示，按鍵放大) -->
+    <div class="flex items-center gap-4 flex-1 justify-center w-full md:w-auto">
+        
+        <!-- 切換檢視按鈕 (放大) -->
+        <div class="bg-red-800 p-1.5 rounded-xl flex text-base font-bold shadow-inner">
+            <button onclick="switchView('client')" id="btn-view-client" class="px-5 py-2 rounded-lg bg-white text-red-800 shadow transition whitespace-nowrap">訂購商品</button>
+            <button onclick="switchView('admin')" id="btn-view-admin" class="px-5 py-2 rounded-lg text-red-200 hover:text-white transition whitespace-nowrap">訂購查詢</button>
         </div>
         
-        <!-- 修改：購物車區域 (檢查購物車 + 放大圖示) -->
-        <div onclick="toggleCart()" class="flex items-center gap-2 cursor-pointer bg-red-700 hover:bg-red-800 px-3 py-1.5 rounded-full transition shadow-inner">
-            <span class="text-sm font-bold hidden md:inline">檢查購物車</span>
+        <!-- 檢查購物車 (放大) -->
+        <div onclick="toggleCart()" class="flex items-center gap-3 cursor-pointer bg-red-700 hover:bg-red-800 px-5 py-2 rounded-full transition shadow-lg border border-red-500">
+            <span class="text-lg font-bold whitespace-nowrap">檢查購物車</span>
             <div class="relative">
-                <i class="fas fa-shopping-cart text-xl transform scale-125"></i> <!-- 圖示放大 -->
-                <span id="header-cart-count" class="absolute -top-2 -right-2 bg-yellow-400 text-red-800 text-[10px] font-bold px-1.5 py-0.5 rounded-full border border-red-600">0</span>
+                <i class="fas fa-shopping-cart text-2xl"></i>
+                <span id="header-cart-count" class="absolute -top-2 -right-3 bg-yellow-400 text-red-800 text-xs font-black px-2 py-0.5 rounded-full border-2 border-red-600">0</span>
             </div>
         </div>
     </div>
+
+    <!-- 右側佔位 (為了讓中間按鈕在桌面版盡量居中，可隱藏或放置使用者資訊) -->
+    <div class="hidden md:block w-32"></div>
   </div>
 </header>
 
 <!-- ================= 頁面：前台點餐 (Client View) ================= -->
 <div id="view-client">
-    <!-- 修改：跑馬燈與訂購人按鈕 -->
     <div class="bg-orange-50 border-b border-orange-100 p-4">
         <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-3">
             <div class="w-full md:w-2/3 overflow-hidden">
-                <!-- 跑馬燈 -->
-                <marquee id="marquee-text" class="text-lg text-gray-700 font-bold bg-white/50 py-1 rounded px-2" scrollamount="6">
+                <!-- 跑馬燈：背景改為無色透明 -->
+                <marquee id="marquee-text" class="text-xl text-gray-700 font-bold bg-transparent py-1 px-2" scrollamount="6">
                     載入中...
                 </marquee>
             </div>
@@ -60,7 +69,7 @@
         </div>
     </div>
 
-    <nav id="category-nav" class="sticky top-[60px] bg-white/95 backdrop-blur border-b overflow-x-auto whitespace-nowrap z-30 px-4 py-3 flex gap-2 no-scrollbar shadow-sm">
+    <nav id="category-nav" class="sticky top-[80px] md:top-[88px] bg-white/95 backdrop-blur border-b overflow-x-auto whitespace-nowrap z-30 px-4 py-3 flex gap-2 no-scrollbar shadow-sm">
         <button onclick="filterMenu('all')" class="category-btn active px-4 py-1.5 rounded-full border border-gray-300 text-sm font-medium transition">全部</button>
     </nav>
 
@@ -269,11 +278,11 @@ function switchView(view) {
     const btnClient = document.getElementById('btn-view-client');
     const btnAdmin = document.getElementById('btn-view-admin');
     if(view === 'client') {
-        btnClient.className = "px-3 py-1 rounded bg-white text-red-800 shadow transition";
-        btnAdmin.className = "px-3 py-1 rounded text-red-200 hover:text-white transition";
+        btnClient.className = "px-5 py-2 rounded-lg bg-white text-red-800 shadow transition whitespace-nowrap";
+        btnAdmin.className = "px-5 py-2 rounded-lg text-red-200 hover:text-white transition whitespace-nowrap";
     } else {
-        btnClient.className = "px-3 py-1 rounded text-red-200 hover:text-white transition";
-        btnAdmin.className = "px-3 py-1 rounded bg-white text-red-800 shadow transition";
+        btnClient.className = "px-5 py-2 rounded-lg text-red-200 hover:text-white transition whitespace-nowrap";
+        btnAdmin.className = "px-5 py-2 rounded-lg bg-white text-red-800 shadow transition whitespace-nowrap";
         loadAdminOrders();
     }
 }
