@@ -1,5 +1,3 @@
-HTML-0221
-
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -19,25 +17,16 @@ HTML-0221
 </head>
 <body class="pb-20 text-gray-800">
 
-<!-- 頂部導航 -->
 <header class="bg-red-600 text-white shadow-md sticky top-0 z-40">
   <div class="container mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-4">
-    
-    <!-- 左側 Logo -->
     <h1 class="text-2xl font-bold flex items-center gap-2 shrink-0">
         <i class="fas fa-utensils"></i> 阿胖團購
     </h1>
-    
-    <!-- 中間按鈕區 (置中顯示，按鍵放大) -->
     <div class="flex items-center gap-4 flex-1 justify-center w-full md:w-auto">
-        
-        <!-- 切換檢視按鈕 (放大) -->
         <div class="bg-red-800 p-1.5 rounded-xl flex text-base font-bold shadow-inner">
             <button onclick="switchView('client')" id="btn-view-client" class="px-5 py-2 rounded-lg bg-white text-red-800 shadow transition whitespace-nowrap">訂購商品</button>
             <button onclick="switchView('admin')" id="btn-view-admin" class="px-5 py-2 rounded-lg text-red-200 hover:text-white transition whitespace-nowrap">訂購查詢</button>
         </div>
-        
-        <!-- 檢查購物車 (放大) -->
         <div onclick="toggleCart()" class="flex items-center gap-3 cursor-pointer bg-red-700 hover:bg-red-800 px-5 py-2 rounded-full transition shadow-lg border border-red-500">
             <span class="text-lg font-bold whitespace-nowrap">檢查購物車</span>
             <div class="relative">
@@ -46,23 +35,18 @@ HTML-0221
             </div>
         </div>
     </div>
-
-    <!-- 右側佔位 (為了讓中間按鈕在桌面版盡量居中，可隱藏或放置使用者資訊) -->
     <div class="hidden md:block w-32"></div>
   </div>
 </header>
 
-<!-- ================= 頁面：前台點餐 (Client View) ================= -->
 <div id="view-client">
     <div class="bg-orange-50 border-b border-orange-100 p-4">
         <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-3">
             <div class="w-full md:w-2/3 overflow-hidden">
-                <!-- 跑馬燈：背景改為無色透明 -->
                 <marquee id="marquee-text" class="text-xl text-gray-700 font-bold bg-transparent py-1 px-2" scrollamount="6">
                     載入中...
                 </marquee>
             </div>
-            
             <div class="flex items-center gap-3 w-full md:w-auto justify-end">
                 <button onclick="openNameModal()" class="flex-1 md:flex-none bg-white border border-orange-200 text-orange-700 px-4 py-2 rounded-full shadow-sm hover:bg-orange-100 transition flex items-center justify-center gap-2">
                     <i class="fas fa-user-edit"></i> <span id="display-name">設定訂購人</span>
@@ -84,16 +68,13 @@ HTML-0221
     </main>
 </div>
 
-<!-- ================= 頁面：後台管理 (Admin View) ================= -->
 <div id="view-admin" class="hidden container mx-auto p-4">
-    <!-- 後台分頁導航 -->
     <div class="flex flex-wrap gap-2 md:gap-4 border-b mb-6 overflow-x-auto no-scrollbar">
         <button onclick="switchAdminTab('orders')" id="tab-orders" class="px-4 py-2 font-bold whitespace-nowrap text-red-600 border-b-2 border-red-600">訂單管理</button>
         <button onclick="switchAdminTab('history')" id="tab-history" class="px-4 py-2 font-bold whitespace-nowrap text-gray-400 hover:text-gray-600">訂單總表</button>
         <button onclick="switchAdminTab('menu')" id="tab-menu" class="px-4 py-2 font-bold whitespace-nowrap text-gray-400 hover:text-gray-600">菜單管理</button>
     </div>
 
-    <!-- 1. 訂單管理分頁 (未完成/今日) -->
     <div id="admin-orders-panel">
         <div class="flex justify-between items-center mb-4">
             <p id="admin-status" class="text-sm text-gray-500">載入中...</p>
@@ -102,7 +83,6 @@ HTML-0221
         <div id="admin-orders-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
     </div>
 
-    <!-- 2. 訂單總表分頁 (歷史查詢) -->
     <div id="admin-history-panel" class="hidden">
         <div class="bg-white rounded-xl shadow-sm border p-4 mb-4">
             <h3 class="font-bold text-gray-800 mb-3 flex items-center gap-2"><i class="fas fa-filter text-red-500"></i> 查詢條件</h3>
@@ -133,14 +113,14 @@ HTML-0221
                             <th class="px-4 py-3 text-center">數量</th>
                             <th class="px-4 py-3 text-right">小計</th>
                             <th class="px-4 py-3 text-center">狀態</th>
+                            <th class="px-4 py-3 text-center">操作</th>
                         </tr>
                     </thead>
                     <tbody id="history-tbody" class="divide-y divide-gray-100">
-                        <tr><td colspan="7" class="px-4 py-10 text-center text-gray-400">請稍候，正在讀取資料...</td></tr>
+                        <tr><td colspan="8" class="px-4 py-10 text-center text-gray-400">請稍候，正在讀取資料...</td></tr>
                     </tbody>
                 </table>
             </div>
-            <!-- 加總列 -->
             <div class="bg-red-50 border-t border-red-100 p-4 flex flex-col md:flex-row justify-end items-center gap-4 text-red-800">
                 <div class="font-bold">總數量：<span id="hist-total-qty" class="text-xl ml-1">0</span></div>
                 <div class="font-bold">總金額：<span id="hist-total-amt" class="text-xl ml-1">$0</span></div>
@@ -148,7 +128,6 @@ HTML-0221
         </div>
     </div>
 
-    <!-- 3. 菜單管理分頁 -->
     <div id="admin-menu-panel" class="hidden">
         <div class="flex justify-between items-center mb-4">
             <p class="text-sm text-gray-500">管理現有菜單 (修改後需刷新)</p>
@@ -176,7 +155,6 @@ HTML-0221
     </div>
 </div>
 
-<!-- ================= 側邊購物車 ================= -->
 <div id="cart-sidebar" class="fixed inset-y-0 right-0 w-full md:w-96 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-[60] flex flex-col">
   <div class="p-4 border-b flex justify-between items-center bg-gray-50">
     <h3 class="font-bold text-lg"><i class="fas fa-shopping-bag text-red-500 mr-2"></i>已選餐點</h3>
@@ -193,7 +171,6 @@ HTML-0221
 </div>
 <div id="overlay" onclick="toggleCart()" class="fixed inset-0 bg-black/40 backdrop-blur-[1px] hidden z-50 transition-opacity"></div>
 
-<!-- ================= Modal: 輸入姓名 ================= -->
 <div id="modal-name" class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center z-[70]">
     <div class="modal-overlay absolute w-full h-full bg-black/50 backdrop-blur-sm" onclick="closeNameModal()"></div>
     <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded-2xl shadow-2xl z-50 p-6 transform scale-95 transition-transform duration-300">
@@ -204,7 +181,6 @@ HTML-0221
     </div>
 </div>
 
-<!-- ================= Modal: 驗證碼 (通用) ================= -->
 <div id="modal-auth" class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center z-[80]">
     <div class="modal-overlay absolute w-full h-full bg-black/60" onclick="closeAuthModal()"></div>
     <div class="modal-container bg-white w-11/12 md:max-w-sm mx-auto rounded-2xl shadow-2xl z-50 p-6">
@@ -218,7 +194,6 @@ HTML-0221
     </div>
 </div>
 
-<!-- ================= Modal: 菜單編輯/新增 ================= -->
 <div id="modal-menu-edit" class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center z-[70]">
     <div class="modal-overlay absolute w-full h-full bg-black/50 backdrop-blur-sm" onclick="closeMenuModal()"></div>
     <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded-2xl shadow-2xl z-50 p-6 overflow-y-auto max-h-[90vh]">
@@ -239,7 +214,7 @@ HTML-0221
 
 <script>
 // ================= 設定區 =================
-const GAS_API_URL = "https://script.google.com/macros/s/AKfycby4HKzDb7a2AkOjZOl_ZXnIh7xIY_iYjXQunAA6_5B_gY_sTqz6YDU2bemZ8Le4sJpWYQ/exec"; // 請替換您的網址
+const GAS_API_URL = "https://script.google.com/macros/s/AKfycby4HKzDb7a2AkOjZOl_ZXnIh7xIY_iYjXQunAA6_5B_gY_sTqz6YDU2bemZ8Le4sJpWYQ/exec"; 
 
 // ================= 全域變數 =================
 let menuData = [];
@@ -248,7 +223,6 @@ let historyData = [];
 let userName = localStorage.getItem("apan_user_name") || "";
 let currentView = "client";
 let authCallback = null;
-let tempMenuData = {};
 let currentCategory = 'all';
 
 // ================= 初始化 =================
@@ -276,7 +250,6 @@ function switchView(view) {
     document.getElementById('view-client').classList.toggle('hidden', view !== 'client');
     document.getElementById('view-admin').classList.toggle('hidden', view !== 'admin');
     
-    // 按鈕樣式
     const btnClient = document.getElementById('btn-view-client');
     const btnAdmin = document.getElementById('btn-view-admin');
     if(view === 'client') {
@@ -307,15 +280,13 @@ async function fetchMenu() {
     const res = await callApi({ action: "getMenu" });
     if (res.ok) {
         menuData = res.data;
-        // 更新跑馬燈
         if(res.marquee) document.getElementById('marquee-text').innerText = res.marquee;
-        
         renderClientMenu();
         document.getElementById('loading-spinner').style.display = 'none';
     }
 }
 
-function renderClientMenu(filter = 'all') {
+function renderClientMenu() {
     const nav = document.getElementById('category-nav');
     const validItems = menuData.filter(i => i.name && i.name.trim() !== "");
     const cats = ['all', ...new Set(validItems.map(i => i.category))];
@@ -330,11 +301,11 @@ function renderClientMenu(filter = 'all') {
 function filterMenu(c) {
     currentCategory = c;
     document.querySelectorAll('.category-btn').forEach(b => {
-        const txt = b.innerText === '全部' ? 'all' : b.innerText;
+        const txt = (b.innerText === '全部') ? 'all' : b.innerText;
         b.className = `category-btn px-4 py-1.5 rounded-full border text-sm transition ${txt === c ? 'active border-red-500' : 'border-gray-300 text-gray-600'}`;
     });
     const validItems = menuData.filter(i => i.name && i.name.trim() !== "");
-    const items = c === 'all' ? validItems : validItems.filter(i => i.category === c);
+    const items = (c === 'all') ? validItems : validItems.filter(i => i.category === c);
     displayMenu(items);
 }
 
@@ -344,28 +315,18 @@ function displayMenu(items) {
         container.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10">無相關餐點</div>';
         return;
     }
-    
     container.innerHTML = items.map(i => {
-        // 檢查購物車內是否有此商品
         const inCart = cart.find(c => c.row === i.row);
         const qty = inCart ? inCart.qty : 0;
-        
-        // 修改：按鈕顯示邏輯 (數量0顯示加入，否則顯示數量控制)
-        let btnHtml = '';
-        if (qty === 0) {
-            btnHtml = `<button onclick="addToCart(${i.row})" class="bg-red-50 text-red-600 font-bold px-4 py-2 rounded-full hover:bg-red-100 transition shadow-sm w-full">加入</button>`;
-        } else {
-            btnHtml = `
-                <div class="flex items-center justify-between bg-red-600 text-white rounded-full w-full px-1 py-1 shadow-md">
-                    <button onclick="updateItemQty(${i.row}, -1)" class="w-8 h-8 flex items-center justify-center bg-white/20 rounded-full hover:bg-white/30 active:scale-90 transition"><i class="fas fa-minus text-xs"></i></button>
-                    <span class="font-bold text-lg">${qty}</span>
-                    <button onclick="updateItemQty(${i.row}, 1)" class="w-8 h-8 flex items-center justify-center bg-white/20 rounded-full hover:bg-white/30 active:scale-90 transition"><i class="fas fa-plus text-xs"></i></button>
-                </div>
-            `;
-        }
+        let btnHtml = (qty === 0) 
+            ? `<button onclick="addToCart(${i.row})" class="bg-red-50 text-red-600 font-bold px-4 py-2 rounded-full hover:bg-red-100 transition shadow-sm w-full">加入</button>`
+            : `<div class="flex items-center justify-between bg-red-600 text-white rounded-full w-full px-1 py-1 shadow-md">
+                <button onclick="updateItemQty(${i.row}, -1)" class="w-8 h-8 flex items-center justify-center bg-white/20 rounded-full hover:bg-white/30 active:scale-90 transition"><i class="fas fa-minus text-xs"></i></button>
+                <span class="font-bold text-lg">${qty}</span>
+                <button onclick="updateItemQty(${i.row}, 1)" class="w-8 h-8 flex items-center justify-center bg-white/20 rounded-full hover:bg-white/30 active:scale-90 transition"><i class="fas fa-plus text-xs"></i></button>
+               </div>`;
 
-        return `
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col justify-between hover:shadow-md transition">
+        return `<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col justify-between hover:shadow-md transition">
             <div>
                 <span class="text-[10px] bg-orange-100 text-orange-600 px-2 py-0.5 rounded font-bold">${i.category}</span>
                 <h3 class="font-bold text-lg mt-1">${i.name}</h3>
@@ -373,87 +334,63 @@ function displayMenu(items) {
             </div>
             <div class="flex justify-between items-end mt-3 gap-3">
                 <p class="text-red-600 font-black text-lg">$${i.price}</p>
-                <div class="w-28 flex justify-end" id="btn-container-${i.row}">
-                    ${btnHtml}
-                </div>
+                <div class="w-28 flex justify-end" id="btn-container-${i.row}">${btnHtml}</div>
             </div>
         </div>`;
     }).join('');
 }
 
-// 修改：單純加入功能 (數量 0 -> 1)
 function addToCart(rowId) {
     const item = menuData.find(m => m.row === rowId);
     if(!item) return;
     cart.push({...item, qty:1});
-    
-    // 更新介面
     updateCartUI();
     refreshMenuCardUI(rowId);
-    
-    const badge = document.getElementById('header-cart-count');
-    badge.classList.add('scale-150'); setTimeout(()=>badge.classList.remove('scale-150'), 200);
 }
 
-// 修改：直接在卡片上增減數量
 function updateItemQty(rowId, delta) {
     const idx = cart.findIndex(c => c.row === rowId);
     if (idx !== -1) {
         cart[idx].qty += delta;
-        if (cart[idx].qty <= 0) {
-            cart.splice(idx, 1);
-        }
+        if (cart[idx].qty <= 0) cart.splice(idx, 1);
     } else if (delta > 0) {
-        // 如果不在購物車但按了+ (理論上UI不會出現，但防呆)
         addToCart(rowId);
         return;
     }
-    
     updateCartUI();
     refreshMenuCardUI(rowId);
 }
 
-// 局部更新卡片UI，避免整個列表重繪導致閃爍
 function refreshMenuCardUI(rowId) {
     const container = document.getElementById(`btn-container-${rowId}`);
-    if (!container) return; // 如果在不同分類可能找不到元素，忽略
-
+    if (!container) return;
     const inCart = cart.find(c => c.row === rowId);
     const qty = inCart ? inCart.qty : 0;
-
-    if (qty === 0) {
-        container.innerHTML = `<button onclick="addToCart(${rowId})" class="bg-red-50 text-red-600 font-bold px-4 py-2 rounded-full hover:bg-red-100 transition shadow-sm w-full">加入</button>`;
-    } else {
-        container.innerHTML = `
-            <div class="flex items-center justify-between bg-red-600 text-white rounded-full w-full px-1 py-1 shadow-md">
-                <button onclick="updateItemQty(${rowId}, -1)" class="w-8 h-8 flex items-center justify-center bg-white/20 rounded-full hover:bg-white/30 active:scale-90 transition"><i class="fas fa-minus text-xs"></i></button>
-                <span class="font-bold text-lg">${qty}</span>
-                <button onclick="updateItemQty(${rowId}, 1)" class="w-8 h-8 flex items-center justify-center bg-white/20 rounded-full hover:bg-white/30 active:scale-90 transition"><i class="fas fa-plus text-xs"></i></button>
-            </div>
-        `;
-    }
+    container.innerHTML = (qty === 0)
+        ? `<button onclick="addToCart(${rowId})" class="bg-red-50 text-red-600 font-bold px-4 py-2 rounded-full hover:bg-red-100 transition shadow-sm w-full">加入</button>`
+        : `<div class="flex items-center justify-between bg-red-600 text-white rounded-full w-full px-1 py-1 shadow-md">
+            <button onclick="updateItemQty(${rowId}, -1)" class="w-8 h-8 flex items-center justify-center bg-white/20 rounded-full hover:bg-white/30 active:scale-90 transition"><i class="fas fa-minus text-xs"></i></button>
+            <span class="font-bold text-lg">${qty}</span>
+            <button onclick="updateItemQty(${rowId}, 1)" class="w-8 h-8 flex items-center justify-center bg-white/20 rounded-full hover:bg-white/30 active:scale-90 transition"><i class="fas fa-plus text-xs"></i></button>
+           </div>`;
 }
 
 function updateCartUI() {
     const list = document.getElementById('cart-items');
     let total = 0, count = 0;
     list.innerHTML = cart.length ? '' : '<div class="text-center text-gray-400 py-10">購物車空的</div>';
-    
     cart.forEach((c) => {
         total += c.price * c.qty; count += c.qty;
-        list.innerHTML += `
-            <div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl mb-2">
-                <div class="flex-1"><div class="font-bold">${c.name}</div><div class="text-xs text-gray-500">$${c.price}</div></div>
-                <div class="flex items-center gap-2 bg-white px-2 py-1 rounded border">
-                    <button onclick="updateItemQty(${c.row},-1)" class="w-5 text-gray-400 hover:text-red-600"><i class="fas fa-minus text-xs"></i></button>
-                    <span class="font-bold text-sm w-4 text-center">${c.qty}</span>
-                    <button onclick="updateItemQty(${c.row},1)" class="w-5 text-gray-400 hover:text-green-600"><i class="fas fa-plus text-xs"></i></button>
-                </div>
-                <div class="w-12 text-right font-bold text-gray-700">$${c.price*c.qty}</div>
-            </div>`;
+        list.innerHTML += `<div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl mb-2">
+            <div class="flex-1"><div class="font-bold">${c.name}</div><div class="text-xs text-gray-500">$${c.price}</div></div>
+            <div class="flex items-center gap-2 bg-white px-2 py-1 rounded border">
+                <button onclick="updateItemQty(${c.row},-1)" class="w-5 text-gray-400 hover:text-red-600"><i class="fas fa-minus text-xs"></i></button>
+                <span class="font-bold text-sm w-4 text-center">${c.qty}</span>
+                <button onclick="updateItemQty(${c.row},1)" class="w-5 text-gray-400 hover:text-green-600"><i class="fas fa-plus text-xs"></i></button>
+            </div>
+            <div class="w-12 text-right font-bold text-gray-700">$${c.price*c.qty}</div>
+        </div>`;
     });
-    
-    // 更新所有購物車計數器 (Header & Sidebar)
     document.getElementById('header-cart-count').innerText = count;
     document.getElementById('total-price').innerText = `$${total}`;
 }
@@ -464,29 +401,19 @@ function toggleCart() {
     document.body.classList.toggle('modal-active');
 }
 
-function openNameModal() { document.getElementById('modal-name').classList.remove('opacity-0', 'pointer-events-none'); document.getElementById('modal-name').querySelector('.modal-container').classList.remove('scale-95'); document.getElementById('input-name').value = userName; }
-function closeNameModal() { document.getElementById('modal-name').classList.add('opacity-0', 'pointer-events-none'); document.getElementById('modal-name').querySelector('.modal-container').classList.add('scale-95'); }
+function openNameModal() { document.getElementById('modal-name').classList.remove('opacity-0', 'pointer-events-none'); document.getElementById('input-name').value = userName; }
+function closeNameModal() { document.getElementById('modal-name').classList.add('opacity-0', 'pointer-events-none'); }
 function saveName() { const val = document.getElementById('input-name').value.trim(); if(val) { userName = val; localStorage.setItem("apan_user_name", val); updateNameDisplay(); closeNameModal(); } }
-function updateNameDisplay() { document.getElementById('display-name').innerText = userName; document.getElementById('display-name').classList.add('font-bold'); }
+function updateNameDisplay() { document.getElementById('display-name').innerText = userName; }
 
 async function submitOrder() {
     if(!userName) { alert("請先設定姓名"); toggleCart(); openNameModal(); return; }
     if(!cart.length) return alert("購物車空的");
-    const btn = document.getElementById('btn-submit'); const oldText = btn.innerText;
+    const btn = document.getElementById('btn-submit');
     btn.disabled = true; btn.innerText = "傳送中...";
     const res = await callApi({ action: "submitOrder", name: userName, items: cart });
-    if(res.ok) { 
-        alert("訂單已送出"); 
-        cart = []; 
-        updateCartUI(); 
-        toggleCart(); 
-        // 刷新所有卡片狀態回歸「加入」
-        const validItems = menuData.filter(i => i.name && i.name.trim() !== "");
-        const items = currentCategory === 'all' ? validItems : validItems.filter(i => i.category === currentCategory);
-        displayMenu(items);
-    }
-    else { alert("失敗: " + res.message); }
-    btn.disabled = false; btn.innerText = oldText;
+    if(res.ok) { alert("訂單已送出"); cart = []; updateCartUI(); toggleCart(); fetchMenu(); } else { alert("失敗: " + res.message); }
+    btn.disabled = false; btn.innerText = "送出訂單";
 }
 
 // ================= 後台 - 訂單管理 =================
@@ -495,160 +422,85 @@ async function loadAdminOrders() {
     const res = await callApi({ action: "getPendingOrdersMerged" });
     const container = document.getElementById('admin-orders-container');
     container.innerHTML = '';
-    
     if(res.ok) {
         const list = res.data;
         document.getElementById('admin-status').innerText = list.length ? `待處理: ${list.length}` : "目前無訂單";
-        if(!list.length) container.innerHTML = `<div class="col-span-full text-center py-10 text-gray-300"><i class="fas fa-check-circle text-5xl mb-2"></i><p>無待處理訂單</p></div>`;
-        
+        if(!list.length) container.innerHTML = `<div class="col-span-full text-center py-10 text-gray-300"><p>無待處理訂單</p></div>`;
         list.forEach(t => {
             const isServed = t.status === 'served';
             const htmlItems = t.items.map(i => `<div class="flex justify-between border-b last:border-0 border-gray-100 py-1 text-sm"><span>${i.item} x${i.qty}</span><span class="font-bold text-gray-600">$${i.subtotal}</span></div>`).join('');
-
-           const btn = isServed 
-    ? `<button onclick="reqAuth('clearOrder', '${t.name}')" 
-         class="bg-gray-800 text-white px-3 py-1 rounded text-sm hover:bg-gray-900">
-         結帳 (需驗證)
-       </button>`
-    : `<button onclick="markStatus('${t.name}', 'served')" 
-         class="bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600">
-         領取
-       </button>`;
+            // 修改：取貨不驗證，結帳(清除)需驗證
+            const btn = isServed 
+                ? `<button onclick="reqAuth('clearOrder', '${t.name}')" class="bg-gray-800 text-white px-3 py-1 rounded text-sm hover:bg-gray-900">結帳 (需驗證)</button>`
+                : `<button onclick="markStatus('${t.name}', 'served')" class="bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600">取貨</button>`;
             
-            container.innerHTML += `
-                <div class="border rounded-xl p-4 shadow-sm ${isServed?'bg-green-50 border-green-200':'bg-white'}">
-                    <div class="flex justify-between mb-2">
-                        <div>
-                            <h3 class="font-bold text-lg">${t.name}</h3>
-                            <span class="text-xs text-gray-500"><i class="far fa-clock"></i> ${formatDateTime(t.time)}</span>
-                        </div>
-                        <div>${btn}</div>
-                    </div>
-                    <div class="bg-white/60 p-2 rounded mb-2 space-y-1">${htmlItems}</div>
-                    <div class="flex justify-end items-center border-t pt-2 border-gray-200/50">
-                        <span class="text-gray-500 text-xs mr-2 font-bold">總金額</span>
-                        <div class="font-black text-red-600 text-lg">$${t.total}</div>
-                    </div>
-                </div>`;
+            container.innerHTML += `<div class="border rounded-xl p-4 shadow-sm ${isServed?'bg-green-50 border-green-200':'bg-white'}">
+                <div class="flex justify-between mb-2">
+                    <div><h3 class="font-bold text-lg">${t.name}</h3><span class="text-xs text-gray-500">${formatDateTime(t.time)}</span></div>
+                    <div>${btn}</div>
+                </div>
+                <div class="bg-white/60 p-2 rounded mb-2 space-y-1">${htmlItems}</div>
+                <div class="flex justify-end items-center border-t pt-2 border-gray-200/50">
+                    <span class="text-gray-500 text-xs mr-2 font-bold">總金額</span><div class="font-black text-red-600 text-lg">$${t.total}</div>
+                </div>
+            </div>`;
         });
     }
 }
 
-function formatDateTime(isoStr) {
-    try {
-        const d = new Date(isoStr);
-        const md = `${d.getMonth()+1}/${d.getDate()}`;
-        const hm = `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
-        return `${md} ${hm}`;
-    } catch(e) { return "--/-- --:--"; }
-}
-
 async function markStatus(table, status, pwd="") {
-    const payload = { action: "markTableStatus", table, status };
-    if(pwd) payload.password = pwd;
-    const res = await callApi(payload);
+    const res = await callApi({ action: "markTableStatus", table, status, password: pwd });
     if(res.ok) loadAdminOrders(); else alert(res.message);
 }
 
 // ================= 後台 - 訂單總表 =================
 async function loadHistoryData() {
     const tbody = document.getElementById('history-tbody');
-    tbody.innerHTML = '<tr><td colspan="7" class="px-4 py-10 text-center text-gray-400"><i class="fas fa-spinner fa-spin mr-2"></i>資料讀取中...</td></tr>';
-    
-    if(document.getElementById('hist-filter-date').options.length <= 1) {
-        document.getElementById('hist-filter-date').innerHTML = '<option value="all">讀取中...</option>';
-    }
-
+    tbody.innerHTML = '<tr><td colspan="8" class="px-4 py-10 text-center text-gray-400">資料讀取中...</td></tr>';
     const res = await callApi({ action: "getOrderHistory" });
     if(res.ok) {
         historyData = res.data;
         initHistoryFilters();
         applyHistoryFilters();
-    } else {
-        tbody.innerHTML = `<tr><td colspan="7" class="px-4 py-10 text-center text-red-500">讀取失敗: ${res.message}</td></tr>`;
     }
 }
 
 function initHistoryFilters() {
-    const dateSet = new Set();
-    const itemSet = new Set();
-    const nameSet = new Set();
+    const dateSet = new Set(), itemSet = new Set(), nameSet = new Set();
     historyData.forEach(r => {
-        try {
-            const d = new Date(r.time);
-            const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-            dateSet.add(dateStr);
-        } catch(e){}
-        itemSet.add(r.item);
-        nameSet.add(r.name);
+        try { const d = new Date(r.time); dateSet.add(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`); } catch(e){}
+        itemSet.add(r.item); nameSet.add(r.name);
     });
-
-    const dateSel = document.getElementById('hist-filter-date');
-    const itemSel = document.getElementById('hist-filter-item');
-    const nameSel = document.getElementById('hist-filter-name');
-
-    dateSel.innerHTML = '<option value="all">所有日期</option>' + [...dateSet].sort().reverse().map(d => `<option value="${d}">${d}</option>`).join('');
-    itemSel.innerHTML = '<option value="all">所有品項</option>' + [...itemSet].sort().map(i => `<option value="${i}">${i}</option>`).join('');
-    nameSel.innerHTML = '<option value="all">所有人員</option>' + [...nameSet].sort().map(n => `<option value="${n}">${n}</option>`).join('');
+    document.getElementById('hist-filter-date').innerHTML = '<option value="all">所有日期</option>' + [...dateSet].sort().reverse().map(d => `<option value="${d}">${d}</option>`).join('');
+    document.getElementById('hist-filter-item').innerHTML = '<option value="all">所有品項</option>' + [...itemSet].sort().map(i => `<option value="${i}">${i}</option>`).join('');
+    document.getElementById('hist-filter-name').innerHTML = '<option value="all">所有人員</option>' + [...nameSet].sort().map(n => `<option value="${n}">${n}</option>`).join('');
 }
 
 function applyHistoryFilters() {
-    const dateVal = document.getElementById('hist-filter-date').value;
-    const itemVal = document.getElementById('hist-filter-item').value;
-    const nameVal = document.getElementById('hist-filter-name').value;
+    const dv = document.getElementById('hist-filter-date').value, iv = document.getElementById('hist-filter-item').value, nv = document.getElementById('hist-filter-name').value;
     const tbody = document.getElementById('history-tbody');
-    
+    let tQty = 0, tAmt = 0;
     const filtered = historyData.filter(r => {
-        let matchDate = true;
-        if(dateVal !== 'all') {
-            try {
-                const d = new Date(r.time);
-                const rDate = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-                if(rDate !== dateVal) matchDate = false;
-            } catch(e){ matchDate = false; }
-        }
-        return matchDate && (itemVal === 'all' || r.item === itemVal) && (nameVal === 'all' || r.name === nameVal);
+        const d = new Date(r.time), ds = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+        return (dv==='all'||ds===dv) && (iv==='all'||r.item===iv) && (nv==='all'||r.name===nv);
     });
-
-    if(filtered.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" class="px-4 py-10 text-center text-gray-400">沒有符合條件的訂單</td></tr>';
-        document.getElementById('hist-total-qty').innerText = '0';
-        document.getElementById('hist-total-amt').innerText = '$0';
-        return;
-    }
-
-    let totalQty = 0, totalAmt = 0;
     tbody.innerHTML = filtered.map(r => {
-        totalQty += r.qty; totalAmt += r.subtotal;
-        let statusBadge = '';
-        if(r.status === 'completed') statusBadge = '<span class="bg-gray-100 text-gray-500 px-2 py-0.5 rounded text-xs">已結案</span>';
-        else if(r.status === 'served') statusBadge = '<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded text-xs">已領取</span>';
-        else statusBadge = '<span class="bg-red-100 text-red-600 px-2 py-0.5 rounded text-xs">領取中</span>';
-        else statusBadge = '<span class="bg-red-100 text-red-600 px-2 py-0.5 rounded text-xs">刪除</span>';
-
-
-        return `
-            <tr class="hover:bg-gray-50 border-b border-gray-100 last:border-0">
-                <td class="px-4 py-2 whitespace-nowrap text-gray-500">${formatDateTime(r.time)}</td>
-                <td class="px-4 py-2 font-bold text-gray-800">${r.name}</td>
-                <td class="px-4 py-2">${r.item}</td>
-                <td class="px-4 py-2 text-right text-gray-500">$${r.price}</td>
-                <td class="px-4 py-2 text-center">${r.qty}</td>
-                <td class="px-4 py-2 text-right font-bold text-gray-700">$${r.subtotal}</td>
-                <td class="px-4 py-2 text-center">${statusBadge}</td>
-
-<td class="px-4 py-2 text-center">
-    <button onclick="reqAuth('deleteSingleOrder', '${r.id}')"
-        class="text-red-500 hover:text-red-700">
-        <i class="fas fa-trash"></i>
-    </button>
-</td>
-
-            </tr>`;
+        tQty += r.qty; tAmt += r.subtotal;
+        return `<tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">${formatDateTime(r.time)}</td>
+            <td class="px-4 py-3 font-medium">${r.name}</td>
+            <td class="px-4 py-3">${r.item}</td>
+            <td class="px-4 py-3 text-right">$${r.price}</td>
+            <td class="px-4 py-3 text-center">${r.qty}</td>
+            <td class="px-4 py-3 text-right font-bold">$${r.subtotal}</td>
+            <td class="px-4 py-3 text-center"><span class="px-2 py-1 rounded-full text-xs ${r.status==='served'?'bg-green-100 text-green-700':'bg-yellow-100 text-yellow-700'}">${r.status==='served'?'已取貨':'待處理'}</span></td>
+            <td class="px-4 py-3 text-center">
+                <button onclick="reqAuth('deleteRow', ${r.row})" class="text-red-500 hover:text-red-700 transition"><i class="fas fa-trash-alt"></i></button>
+            </td>
+        </tr>`;
     }).join('');
-
-    document.getElementById('hist-total-qty').innerText = totalQty;
-    document.getElementById('hist-total-amt').innerText = `$${totalAmt}`;
+    document.getElementById('hist-total-qty').innerText = tQty;
+    document.getElementById('hist-total-amt').innerText = `$${tAmt}`;
 }
 
 function resetHistoryFilters() {
@@ -658,128 +510,115 @@ function resetHistoryFilters() {
     applyHistoryFilters();
 }
 
-function triggerDeleteAllOrders() {
-    reqAuth('deleteAll');
-}
-
-// ================= 後台 - 菜單管理 =================
-async function loadAdminMenu() {
-    const res = await callApi({ action: "getMenu" });
-    if(!res.ok) return alert("讀取失敗");
-    const tbody = document.getElementById('admin-menu-tbody');
-    tbody.innerHTML = '';
-    
-    res.data.forEach(m => {
-        tbody.innerHTML += `
-            <tr class="hover:bg-gray-50 group">
-                <td class="px-4 py-3 font-medium text-gray-900">${m.category}</td>
-                <td class="px-4 py-3">${m.name || '<span class="text-gray-300">(空)</span>'}</td>
-                <td class="px-4 py-3 text-gray-500 text-xs hidden md:table-cell truncate max-w-xs">${m.desc}</td>
-                <td class="px-4 py-3 font-bold text-gray-700">$${m.price}</td>
-                <td class="px-4 py-3 text-center">
-                    <button onclick="openMenuModal('edit', ${m.row})" class="text-blue-500 hover:text-blue-700 mx-1"><i class="fas fa-edit"></i></button>
-                    <button onclick="reqAuth('deleteMenu', ${m.row})" class="text-red-400 hover:text-red-600 mx-1"><i class="fas fa-trash-alt"></i></button>
-                </td>
-            </tr>`;
-    });
-    menuData = res.data;
-}
-
-function openMenuModal(mode, rowId=null) {
-    const modal = document.getElementById('modal-menu-edit');
-    const title = document.getElementById('menu-modal-title');
-    const rowEl = document.getElementById('menu-row-id');
+// ================= 驗證與刪除邏輯 =================
+function reqAuth(action, target) {
+    const modal = document.getElementById('modal-auth');
+    const input = document.getElementById('input-auth-pwd');
+    const confirmBtn = document.getElementById('btn-auth-confirm');
+    input.value = "";
     modal.classList.remove('opacity-0', 'pointer-events-none');
     
-    if(mode === 'add') {
-        title.innerText = "新增品項"; rowEl.value = "";
-        ['cat','name','desc','price'].forEach(k=>document.getElementById(`menu-${k}`).value = "");
-    } else {
-        const item = menuData.find(m => m.row === rowId); if(!item) return;
-        title.innerText = "編輯品項"; rowEl.value = rowId;
-        document.getElementById('menu-cat').value = item.category;
-        document.getElementById('menu-name').value = item.name;
-        document.getElementById('menu-desc').value = item.desc;
-        document.getElementById('menu-price').value = item.price;
+    if(action === 'clearOrder') {
+        document.getElementById('auth-title').innerText = "結帳確認";
+        document.getElementById('auth-desc').innerText = `請輸入驗證碼以將「${target}」設為結帳完成`;
+    } else if(action === 'deleteRow') {
+        document.getElementById('auth-title').innerText = "刪除訂單";
+        document.getElementById('auth-desc').innerText = "請輸入驗證碼以刪除此筆資料";
+    } else if(action === 'deleteAll') {
+        document.getElementById('auth-title').innerText = "危險操作";
+        document.getElementById('auth-desc').innerText = "請輸入驗證碼以刪除「所有」訂單紀錄";
+    }
+
+    confirmBtn.onclick = async () => {
+        const pwd = input.value;
+        if(!pwd) return;
+        confirmBtn.disabled = true; confirmBtn.innerText = "處理中...";
+        
+        let res;
+        if(action === 'clearOrder') res = await callApi({ action: "markTableStatus", table: target, status: "cleared", password: pwd });
+        else if(action === 'deleteRow') res = await callApi({ action: "deleteOrder", row: target, password: pwd });
+        else if(action === 'deleteAll') res = await callApi({ action: "deleteAllOrders", password: pwd });
+
+        if(res && res.ok) {
+            closeAuthModal();
+            if(action === 'clearOrder') loadAdminOrders(); else loadHistoryData();
+        } else {
+            alert(res ? res.message : "驗證失敗");
+        }
+        confirmBtn.disabled = false; confirmBtn.innerText = "確認";
+    };
+}
+
+function closeAuthModal() { document.getElementById('modal-auth').classList.add('opacity-0', 'pointer-events-none'); }
+function triggerDeleteAllOrders() { reqAuth('deleteAll', null); }
+
+// ================= 菜單管理 =================
+async function loadAdminMenu() {
+    const tbody = document.getElementById('admin-menu-tbody');
+    tbody.innerHTML = '<tr><td colspan="5" class="px-4 py-10 text-center text-gray-400">讀取中...</td></tr>';
+    const res = await callApi({ action: "getMenu" });
+    if(res.ok) {
+        tbody.innerHTML = res.data.map(i => `<tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">${i.category}</td>
+            <td class="px-4 py-3 font-bold">${i.name}</td>
+            <td class="px-4 py-3 hidden md:table-cell text-gray-500">${i.desc}</td>
+            <td class="px-4 py-3 text-red-600 font-bold">$${i.price}</td>
+            <td class="px-4 py-3 text-center">
+                <button onclick="openMenuModal('edit', ${JSON.stringify(i).replace(/"/g, '&quot;')})" class="text-blue-500 hover:text-blue-700 mr-3"><i class="fas fa-edit"></i></button>
+                <button onclick="triggerMenuDelete(${i.row})" class="text-red-400 hover:text-red-600"><i class="fas fa-trash"></i></button>
+            </td>
+        </tr>`).join('');
     }
 }
+
+function openMenuModal(mode, data=null) {
+    const modal = document.getElementById('modal-menu-edit');
+    modal.classList.remove('opacity-0', 'pointer-events-none');
+    document.getElementById('menu-modal-title').innerText = mode==='add'?'新增品項':'編輯品項';
+    document.getElementById('menu-row-id').value = data ? data.row : '';
+    document.getElementById('menu-cat').value = data ? data.category : '';
+    document.getElementById('menu-name').value = data ? data.name : '';
+    document.getElementById('menu-price').value = data ? data.price : '';
+    document.getElementById('menu-desc').value = data ? data.desc : '';
+}
+
 function closeMenuModal() { document.getElementById('modal-menu-edit').classList.add('opacity-0', 'pointer-events-none'); }
+
 function triggerMenuSave() {
     const row = document.getElementById('menu-row-id').value;
-    const cat = document.getElementById('menu-cat').value.trim();
-    const name = document.getElementById('menu-name').value.trim();
-    const desc = document.getElementById('menu-desc').value.trim();
-    const price = document.getElementById('menu-price').value;
-    if(!name) return alert("請輸入名稱");
-    tempMenuData = { row, category: cat, name, desc, price };
-    closeMenuModal();
-    reqAuth(row ? 'editMenu' : 'addMenu');
-}
-
-// ================= 通用驗證與執行 =================
-function reqAuth(actionType, data=null) {
+    const payload = {
+        category: document.getElementById('menu-cat').value,
+        name: document.getElementById('menu-name').value,
+        price: document.getElementById('menu-price').value,
+        desc: document.getElementById('menu-desc').value
+    };
     const modal = document.getElementById('modal-auth');
-    const title = document.getElementById('auth-title');
-    const desc = document.getElementById('auth-desc');
-    const input = document.getElementById('input-auth-pwd');
     modal.classList.remove('opacity-0', 'pointer-events-none');
-    input.value = ""; input.focus();
-    
-    if(actionType === 'clearOrder') {
-        title.innerText = "清除訂單"; desc.innerText = `將清除 ${data} 的訂單，無法復原`;
-        authCallback = (pwd) => markStatus(data, 'completed', pwd);
-    } else if (actionType === 'addMenu') {
-        title.innerText = "新增菜單"; desc.innerText = "輸入密碼以寫入資料庫";
-        authCallback = (pwd) => execMenuAction('addMenuItem', pwd);
-    } else if (actionType === 'editMenu') {
-        title.innerText = "修改菜單"; desc.innerText = "輸入密碼以更新資料";
-        authCallback = (pwd) => execMenuAction('editMenuItem', pwd);
-    } else if (actionType === 'deleteMenu') {
-        title.innerText = "刪除菜單"; desc.innerText = "確定刪除此品項？輸入密碼確認";
-        authCallback = (pwd) => execMenuAction('deleteMenuItem', pwd, {row: data});
-    } else if (actionType === 'deleteAll') {
-        title.innerText = "刪除全部訂單";
-        desc.innerText = "警告：這將清空所有訂單資料，無法復原！";
-        authCallback = (pwd) => execDeleteAll(pwd);
-    }
+    document.getElementById('auth-title').innerText = "選單維護驗證";
+    document.getElementById('btn-auth-confirm').onclick = async () => {
+        const pwd = document.getElementById('input-auth-pwd').value;
+        const res = await callApi({ action: "saveMenuItem", row, ...payload, password: pwd });
+        if(res.ok) { closeAuthModal(); closeMenuModal(); loadAdminMenu(); fetchMenu(); } else alert(res.message);
+    };
 }
 
-async function execDeleteAll(pwd) {
-    const tbody = document.getElementById('history-tbody');
-    tbody.innerHTML = '<tr><td colspan="7" class="px-4 py-10 text-center text-gray-400"><i class="fas fa-spinner fa-spin mr-2"></i>處理中...</td></tr>';
-    
-    const res = await callApi({ action: "deleteAllOrders", password: pwd });
-    
-    if(res.ok) {
-        alert("已清空所有訂單");
-        loadHistoryData();
-    } else {
-        alert(res.message);
-        loadHistoryData();
-    }
+function triggerMenuDelete(row) {
+    const modal = document.getElementById('modal-auth');
+    modal.classList.remove('opacity-0', 'pointer-events-none');
+    document.getElementById('auth-title').innerText = "刪除品項驗證";
+    document.getElementById('btn-auth-confirm').onclick = async () => {
+        const pwd = document.getElementById('input-auth-pwd').value;
+        const res = await callApi({ action: "deleteMenuItem", row, password: pwd });
+        if(res.ok) { closeAuthModal(); loadAdminMenu(); fetchMenu(); } else alert(res.message);
+    };
 }
 
-document.getElementById('btn-auth-confirm').onclick = () => {
-    const pwd = document.getElementById('input-auth-pwd').value;
-    if(!pwd) return alert("請輸入密碼");
-    if(authCallback) authCallback(pwd);
-    closeAuthModal();
-};
-
-function closeAuthModal() { document.getElementById('modal-auth').classList.add('opacity-0', 'pointer-events-none'); authCallback = null; }
-
-async function execMenuAction(action, pwd, extraData={}) {
-    const btnRefresh = document.querySelector('#admin-menu-panel button .fa-sync-alt').parentElement;
-    const originalContent = btnRefresh.innerHTML;
-    btnRefresh.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 處理中';
-    
-    const payload = { action: action, password: pwd, ...tempMenuData, ...extraData };
-    const res = await callApi(payload);
-    if(res.ok) { alert("操作成功"); loadAdminMenu(); } else { alert("操作失敗: " + res.message); }
-    
-    btnRefresh.innerHTML = originalContent;
+function formatDateTime(isoStr) {
+    try {
+        const d = new Date(isoStr);
+        return `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+    } catch(e) { return "--/-- --:--"; }
 }
-document.getElementById('input-auth-pwd').addEventListener('keyup', (e) => { if(e.key === 'Enter') document.getElementById('btn-auth-confirm').click(); });
 </script>
 </body>
 </html>
