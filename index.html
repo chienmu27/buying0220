@@ -1,3 +1,5 @@
+HTML-0221
+
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -502,9 +504,16 @@ async function loadAdminOrders() {
         list.forEach(t => {
             const isServed = t.status === 'served';
             const htmlItems = t.items.map(i => `<div class="flex justify-between border-b last:border-0 border-gray-100 py-1 text-sm"><span>${i.item} x${i.qty}</span><span class="font-bold text-gray-600">$${i.subtotal}</span></div>`).join('');
-            const btn = isServed 
-                ? `<button onclick="reqAuth('clearOrder', '${t.name}')" class="bg-gray-800 text-white px-3 py-1 rounded text-sm hover:bg-gray-900">清除 (需驗證)</button>`
-                : `<button onclick="markStatus('${t.name}', 'served')" class="bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600">領取</button>`;
+
+           const btn = isServed 
+    ? `<button onclick="reqAuth('clearOrder', '${t.name}')" 
+         class="bg-gray-800 text-white px-3 py-1 rounded text-sm hover:bg-gray-900">
+         結帳 (需驗證)
+       </button>`
+    : `<button onclick="markStatus('${t.name}', 'served')" 
+         class="bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600">
+         領取
+       </button>`;
             
             container.innerHTML += `
                 <div class="border rounded-xl p-4 shadow-sm ${isServed?'bg-green-50 border-green-200':'bg-white'}">
@@ -614,7 +623,9 @@ function applyHistoryFilters() {
         let statusBadge = '';
         if(r.status === 'completed') statusBadge = '<span class="bg-gray-100 text-gray-500 px-2 py-0.5 rounded text-xs">已結案</span>';
         else if(r.status === 'served') statusBadge = '<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded text-xs">已領取</span>';
-        else statusBadge = '<span class="bg-red-100 text-red-600 px-2 py-0.5 rounded text-xs">準備中</span>';
+        else statusBadge = '<span class="bg-red-100 text-red-600 px-2 py-0.5 rounded text-xs">領取中</span>';
+        else statusBadge = '<span class="bg-red-100 text-red-600 px-2 py-0.5 rounded text-xs">刪除</span>';
+
 
         return `
             <tr class="hover:bg-gray-50 border-b border-gray-100 last:border-0">
@@ -625,6 +636,14 @@ function applyHistoryFilters() {
                 <td class="px-4 py-2 text-center">${r.qty}</td>
                 <td class="px-4 py-2 text-right font-bold text-gray-700">$${r.subtotal}</td>
                 <td class="px-4 py-2 text-center">${statusBadge}</td>
+
+<td class="px-4 py-2 text-center">
+    <button onclick="reqAuth('deleteSingleOrder', '${r.id}')"
+        class="text-red-500 hover:text-red-700">
+        <i class="fas fa-trash"></i>
+    </button>
+</td>
+
             </tr>`;
     }).join('');
 
