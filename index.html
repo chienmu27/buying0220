@@ -21,35 +21,49 @@
 <header class="bg-red-600 text-white shadow-md sticky top-0 z-40">
   <div class="container mx-auto px-4 py-3 flex justify-between items-center">
     <h1 class="text-xl font-bold flex items-center gap-2"><i class="fas fa-utensils"></i> 阿胖團購</h1>
-    <div class="bg-red-800 p-1 rounded-lg flex text-xs font-bold">
-        <button onclick="switchView('client')" id="btn-view-client" class="px-3 py-1 rounded bg-white text-red-800 shadow transition">訂購</button>
-        <button onclick="switchView('admin')" id="btn-view-admin" class="px-3 py-1 rounded text-red-200 hover:text-white transition">管理</button>
+    
+    <div class="flex items-center gap-3">
+        <div class="bg-red-800 p-1 rounded-lg flex text-xs font-bold mr-2">
+            <button onclick="switchView('client')" id="btn-view-client" class="px-3 py-1 rounded bg-white text-red-800 shadow transition">訂購</button>
+            <button onclick="switchView('admin')" id="btn-view-admin" class="px-3 py-1 rounded text-red-200 hover:text-white transition">管理</button>
+        </div>
+        
+        <!-- 修改：購物車區域 (檢查購物車 + 放大圖示) -->
+        <div onclick="toggleCart()" class="flex items-center gap-2 cursor-pointer bg-red-700 hover:bg-red-800 px-3 py-1.5 rounded-full transition shadow-inner">
+            <span class="text-sm font-bold hidden md:inline">檢查購物車</span>
+            <div class="relative">
+                <i class="fas fa-shopping-cart text-xl transform scale-125"></i> <!-- 圖示放大 -->
+                <span id="header-cart-count" class="absolute -top-2 -right-2 bg-yellow-400 text-red-800 text-[10px] font-bold px-1.5 py-0.5 rounded-full border border-red-600">0</span>
+            </div>
+        </div>
     </div>
   </div>
 </header>
 
 <!-- ================= 頁面：前台點餐 (Client View) ================= -->
 <div id="view-client">
+    <!-- 修改：跑馬燈與訂購人按鈕 -->
     <div class="bg-orange-50 border-b border-orange-100 p-4">
         <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-3">
-            <div>
-                <h2 id="greeting-title" class="text-xl font-bold text-gray-800"></h2>
-                <p class="text-sm text-gray-500">又是美好的一天</p>
+            <div class="w-full md:w-2/3 overflow-hidden">
+                <!-- 跑馬燈 -->
+                <marquee id="marquee-text" class="text-lg text-gray-700 font-bold bg-white/50 py-1 rounded px-2" scrollamount="6">
+                    載入中...
+                </marquee>
             </div>
-            <div class="flex items-center gap-3 w-full md:w-auto">
+            
+            <div class="flex items-center gap-3 w-full md:w-auto justify-end">
                 <button onclick="openNameModal()" class="flex-1 md:flex-none bg-white border border-orange-200 text-orange-700 px-4 py-2 rounded-full shadow-sm hover:bg-orange-100 transition flex items-center justify-center gap-2">
                     <i class="fas fa-user-edit"></i> <span id="display-name">設定訂購人</span>
                 </button>
-                <div onclick="toggleCart()" class="relative cursor-pointer bg-white p-2 rounded-full shadow-sm border border-gray-200 w-10 h-10 flex items-center justify-center">
-                    <i class="fas fa-shopping-cart text-gray-600"></i>
-                    <span id="cart-count" class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full border-2 border-white">0</span>
-                </div>
             </div>
         </div>
     </div>
+
     <nav id="category-nav" class="sticky top-[60px] bg-white/95 backdrop-blur border-b overflow-x-auto whitespace-nowrap z-30 px-4 py-3 flex gap-2 no-scrollbar shadow-sm">
         <button onclick="filterMenu('all')" class="category-btn active px-4 py-1.5 rounded-full border border-gray-300 text-sm font-medium transition">全部</button>
     </nav>
+
     <main class="container mx-auto p-4 min-h-[50vh]">
         <div id="loading-spinner" class="text-center py-20 text-gray-400">
             <i class="fas fa-circle-notch fa-spin text-4xl mb-3 text-red-400"></i>
@@ -92,7 +106,6 @@
                     <option value="all">所有人員</option>
                 </select>
                 <button onclick="resetHistoryFilters()" class="bg-gray-200 text-gray-600 rounded-lg px-3 py-2 text-sm font-bold hover:bg-gray-300 transition">重置條件</button>
-                <!-- 修改：新增刪除全部按鈕 -->
                 <button onclick="triggerDeleteAllOrders()" class="bg-red-600 text-white rounded-lg px-3 py-2 text-sm font-bold hover:bg-red-700 transition shadow"><i class="fas fa-trash"></i> 刪除全部</button>
             </div>
         </div>
@@ -225,18 +238,13 @@ let userName = localStorage.getItem("apan_user_name") || "";
 let currentView = "client";
 let authCallback = null;
 let tempMenuData = {};
+let currentCategory = 'all';
 
 // ================= 初始化 =================
 window.onload = () => {
-    updateGreeting();
     if(userName) updateNameDisplay();
     fetchMenu();
 };
-
-function updateGreeting() {
-    const now = new Date();
-    document.getElementById("greeting-title").innerText = `嗨！今天是 ${now.getMonth() + 1} 月 ${now.getDate()} 日`;
-}
 
 async function callApi(payload) {
     try {
@@ -288,6 +296,9 @@ async function fetchMenu() {
     const res = await callApi({ action: "getMenu" });
     if (res.ok) {
         menuData = res.data;
+        // 更新跑馬燈
+        if(res.marquee) document.getElementById('marquee-text').innerText = res.marquee;
+        
         renderClientMenu();
         document.getElementById('loading-spinner').style.display = 'none';
     }
@@ -306,6 +317,7 @@ function renderClientMenu(filter = 'all') {
 }
 
 function filterMenu(c) {
+    currentCategory = c;
     document.querySelectorAll('.category-btn').forEach(b => {
         const txt = b.innerText === '全部' ? 'all' : b.innerText;
         b.className = `category-btn px-4 py-1.5 rounded-full border text-sm transition ${txt === c ? 'active border-red-500' : 'border-gray-300 text-gray-600'}`;
@@ -321,56 +333,118 @@ function displayMenu(items) {
         container.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10">無相關餐點</div>';
         return;
     }
-    container.innerHTML = items.map(i => `
+    
+    container.innerHTML = items.map(i => {
+        // 檢查購物車內是否有此商品
+        const inCart = cart.find(c => c.row === i.row);
+        const qty = inCart ? inCart.qty : 0;
+        
+        // 修改：按鈕顯示邏輯 (數量0顯示加入，否則顯示數量控制)
+        let btnHtml = '';
+        if (qty === 0) {
+            btnHtml = `<button onclick="addToCart(${i.row})" class="bg-red-50 text-red-600 font-bold px-4 py-2 rounded-full hover:bg-red-100 transition shadow-sm w-full">加入</button>`;
+        } else {
+            btnHtml = `
+                <div class="flex items-center justify-between bg-red-600 text-white rounded-full w-full px-1 py-1 shadow-md">
+                    <button onclick="updateItemQty(${i.row}, -1)" class="w-8 h-8 flex items-center justify-center bg-white/20 rounded-full hover:bg-white/30 active:scale-90 transition"><i class="fas fa-minus text-xs"></i></button>
+                    <span class="font-bold text-lg">${qty}</span>
+                    <button onclick="updateItemQty(${i.row}, 1)" class="w-8 h-8 flex items-center justify-center bg-white/20 rounded-full hover:bg-white/30 active:scale-90 transition"><i class="fas fa-plus text-xs"></i></button>
+                </div>
+            `;
+        }
+
+        return `
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col justify-between hover:shadow-md transition">
             <div>
                 <span class="text-[10px] bg-orange-100 text-orange-600 px-2 py-0.5 rounded font-bold">${i.category}</span>
                 <h3 class="font-bold text-lg mt-1">${i.name}</h3>
                 <p class="text-xs text-gray-400 mt-1 line-clamp-2">${i.desc}</p>
             </div>
-            <div class="flex justify-between items-end mt-3">
+            <div class="flex justify-between items-end mt-3 gap-3">
                 <p class="text-red-600 font-black text-lg">$${i.price}</p>
-                <button onclick="addToCart(${i.row})" class="bg-red-50 text-red-600 w-9 h-9 rounded-full flex items-center justify-center hover:bg-red-100 transition"><i class="fas fa-plus"></i></button>
+                <div class="w-28 flex justify-end" id="btn-container-${i.row}">
+                    ${btnHtml}
+                </div>
             </div>
-        </div>
-    `).join('');
+        </div>`;
+    }).join('');
 }
 
+// 修改：單純加入功能 (數量 0 -> 1)
 function addToCart(rowId) {
     const item = menuData.find(m => m.row === rowId);
     if(!item) return;
-    const exist = cart.find(c => c.row === rowId);
-    if(exist) exist.qty++; else cart.push({...item, qty:1});
+    cart.push({...item, qty:1});
+    
+    // 更新介面
     updateCartUI();
-    const badge = document.getElementById('cart-count');
-    badge.classList.add('scale-125'); setTimeout(()=>badge.classList.remove('scale-125'), 200);
+    refreshMenuCardUI(rowId);
+    
+    const badge = document.getElementById('header-cart-count');
+    badge.classList.add('scale-150'); setTimeout(()=>badge.classList.remove('scale-150'), 200);
+}
+
+// 修改：直接在卡片上增減數量
+function updateItemQty(rowId, delta) {
+    const idx = cart.findIndex(c => c.row === rowId);
+    if (idx !== -1) {
+        cart[idx].qty += delta;
+        if (cart[idx].qty <= 0) {
+            cart.splice(idx, 1);
+        }
+    } else if (delta > 0) {
+        // 如果不在購物車但按了+ (理論上UI不會出現，但防呆)
+        addToCart(rowId);
+        return;
+    }
+    
+    updateCartUI();
+    refreshMenuCardUI(rowId);
+}
+
+// 局部更新卡片UI，避免整個列表重繪導致閃爍
+function refreshMenuCardUI(rowId) {
+    const container = document.getElementById(`btn-container-${rowId}`);
+    if (!container) return; // 如果在不同分類可能找不到元素，忽略
+
+    const inCart = cart.find(c => c.row === rowId);
+    const qty = inCart ? inCart.qty : 0;
+
+    if (qty === 0) {
+        container.innerHTML = `<button onclick="addToCart(${rowId})" class="bg-red-50 text-red-600 font-bold px-4 py-2 rounded-full hover:bg-red-100 transition shadow-sm w-full">加入</button>`;
+    } else {
+        container.innerHTML = `
+            <div class="flex items-center justify-between bg-red-600 text-white rounded-full w-full px-1 py-1 shadow-md">
+                <button onclick="updateItemQty(${rowId}, -1)" class="w-8 h-8 flex items-center justify-center bg-white/20 rounded-full hover:bg-white/30 active:scale-90 transition"><i class="fas fa-minus text-xs"></i></button>
+                <span class="font-bold text-lg">${qty}</span>
+                <button onclick="updateItemQty(${rowId}, 1)" class="w-8 h-8 flex items-center justify-center bg-white/20 rounded-full hover:bg-white/30 active:scale-90 transition"><i class="fas fa-plus text-xs"></i></button>
+            </div>
+        `;
+    }
 }
 
 function updateCartUI() {
     const list = document.getElementById('cart-items');
     let total = 0, count = 0;
     list.innerHTML = cart.length ? '' : '<div class="text-center text-gray-400 py-10">購物車空的</div>';
-    cart.forEach((c, idx) => {
+    
+    cart.forEach((c) => {
         total += c.price * c.qty; count += c.qty;
         list.innerHTML += `
             <div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl mb-2">
                 <div class="flex-1"><div class="font-bold">${c.name}</div><div class="text-xs text-gray-500">$${c.price}</div></div>
                 <div class="flex items-center gap-2 bg-white px-2 py-1 rounded border">
-                    <button onclick="modQty(${idx},-1)" class="w-5 text-gray-400 hover:text-red-600"><i class="fas fa-minus text-xs"></i></button>
+                    <button onclick="updateItemQty(${c.row},-1)" class="w-5 text-gray-400 hover:text-red-600"><i class="fas fa-minus text-xs"></i></button>
                     <span class="font-bold text-sm w-4 text-center">${c.qty}</span>
-                    <button onclick="modQty(${idx},1)" class="w-5 text-gray-400 hover:text-green-600"><i class="fas fa-plus text-xs"></i></button>
+                    <button onclick="updateItemQty(${c.row},1)" class="w-5 text-gray-400 hover:text-green-600"><i class="fas fa-plus text-xs"></i></button>
                 </div>
                 <div class="w-12 text-right font-bold text-gray-700">$${c.price*c.qty}</div>
             </div>`;
     });
-    document.getElementById('cart-count').innerText = count;
+    
+    // 更新所有購物車計數器 (Header & Sidebar)
+    document.getElementById('header-cart-count').innerText = count;
     document.getElementById('total-price').innerText = `$${total}`;
-}
-
-function modQty(idx, d) {
-    cart[idx].qty += d;
-    if(cart[idx].qty <= 0) cart.splice(idx, 1);
-    updateCartUI();
 }
 
 function toggleCart() {
@@ -390,7 +464,16 @@ async function submitOrder() {
     const btn = document.getElementById('btn-submit'); const oldText = btn.innerText;
     btn.disabled = true; btn.innerText = "傳送中...";
     const res = await callApi({ action: "submitOrder", name: userName, items: cart });
-    if(res.ok) { alert("訂單已送出"); cart = []; updateCartUI(); toggleCart(); }
+    if(res.ok) { 
+        alert("訂單已送出"); 
+        cart = []; 
+        updateCartUI(); 
+        toggleCart(); 
+        // 刷新所有卡片狀態回歸「加入」
+        const validItems = menuData.filter(i => i.name && i.name.trim() !== "");
+        const items = currentCategory === 'all' ? validItems : validItems.filter(i => i.category === currentCategory);
+        displayMenu(items);
+    }
     else { alert("失敗: " + res.message); }
     btn.disabled = false; btn.innerText = oldText;
 }
@@ -644,7 +727,7 @@ async function execDeleteAll(pwd) {
         loadHistoryData();
     } else {
         alert(res.message);
-        loadHistoryData(); // 恢復顯示
+        loadHistoryData();
     }
 }
 
